@@ -8,25 +8,26 @@
 %    Date : 2022.11.30
 % -------------------------------------------------------------------------
 close all
-clear
-clc
 % importdata navresult
 
-% navpath = "dataset1/NavResult.nav";
-% navdata = importdata(navpath);
-% truthpath = 'dataset1/truth.nav';
-% truthdata=importdata(truthpath);
+if cfg.outputfolder=="dataset1"
+    navpath = "dataset1/NavResult.nav";
+    navdata = importdata(navpath);
+    truthpath = 'dataset1/truth.nav';
+    truthdata=importdata(truthpath);
+elseif cfg.outputfolder=="dataset2"
+    navpath = "dataset2/NavResult_GNSSVEL.nav";
+    navdata = importdata(navpath);
+    truthpath = 'dataset2/truth.nav';
+    truthdata=importdata(truthpath);
+else
+    navpath = "dataset3/NavResult_ODONHC.nav";
+    navdata = importdata(navpath);
+    truthpath = 'dataset3/truth.nav';
+    truthdata=importdata(truthpath);
+end
 
-% navpath = "dataset2/NavResult_GNSSVEL.nav";
-% navdata = importdata(navpath);
-% truthpath = 'dataset2/truth.nav';
-% truthdata=importdata(truthpath);
 
-
-navpath = "dataset3/NavResult_ODONHC.nav";
-navdata = importdata(navpath);
-truthpath = 'dataset3/truth.nav';
-truthdata=importdata(truthpath);
 
 % velocity
 figure()

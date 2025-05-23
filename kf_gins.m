@@ -7,9 +7,8 @@
 % Contact : wlq@whu.edu.cn
 %    Date : 2023.3.2
 % -------------------------------------------------------------------------
+clear;clc;
 
-clear;
-clc;
 % add function to workspace
 addpath("function\");
 
@@ -271,4 +270,7 @@ fclose(navfp);
 fclose(stdfp);
 
 disp("GNSS/INS Integration Processing Finished!");
+
+plot_result;
+calc_error;
 
