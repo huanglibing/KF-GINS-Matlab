@@ -25,7 +25,7 @@ function kf = ODONHCUpdate(navstate, odonhc_vel, kf, cfg, thisimu, dt)
     Z = vel_pre - odonhc_vel;
 
     %% measurement equation and noise
-    R = diag([0.1, 0.1, 0.1].^2); % example noise values
+    R = diag(power(cfg.odonhc_measnoise, 2));%m m m
     H = zeros(3, kf.RANK);
     H(1:3, 4:6) = navstate.cbn';
     H(1:3, 7:9) = -cfg.cbv * navstate.cbn' * skew(navstate.vel);
