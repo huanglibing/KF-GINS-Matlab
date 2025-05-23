@@ -21,11 +21,16 @@ function cfg = ProcessConfig()
     %% configure
     cfg.usegnssvel = false;
     cfg.useodonhc = false;
+    cfg.usenhc = true;
     cfg.odoupdaterate = 1; % [Hz]
 
     %% initial information
     cfg.starttime = 456300;
     cfg.endtime = inf;
+
+    %% 关闭gnss时间
+    cfg.debugstarttime = cfg.starttime+200;
+    cfg.debugendtime = cfg.endtime+inf;
 
     cfg.initpos = [30.4447873701; 114.4718632047; 20.899]; % [deg, deg, m]
     cfg.initvel = [0; 0; 0]; % [m/s]
@@ -55,8 +60,8 @@ function cfg = ProcessConfig()
 
     %% install parameters 安装参数
     cfg.antlever = [0.136; -0.301; -0.184]; % [m]
-    cfg.odolever = [0; 0; 1.1]; %[m]
-    cfg.installangle = [0; 0.25; -0.95]; %[deg]
+    cfg.odolever = [-0.05; -0.0; 2.0]; %[m]
+    cfg.installangle = [0; -1.6; 1.2]; %[deg]
 
     %% ODO/NHC measurement noise 观测噪声
     cfg.odonhc_measnoise = [0.1; 0.1; 0.1]; % [m/s]

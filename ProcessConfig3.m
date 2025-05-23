@@ -21,11 +21,16 @@ function cfg = ProcessConfig3()
     %% configure
     cfg.usegnssvel = false;
     cfg.useodonhc = true;
+    cfg.usenhc = false;
     cfg.odoupdaterate = 10; % [Hz]
 
     %% initial information
     cfg.starttime = 292460;
-    cfg.endtime = 293196;
+    cfg.endtime = 293196;%293196;
+
+    %% 关闭gnss时间
+    cfg.debugstarttime = cfg.starttime+inf;
+    cfg.debugendtime = cfg.endtime+inf;
 
     cfg.initpos = [30.5285037471; 114.3556962503; 21.091]; % [deg, deg, m]
     cfg.initvel = [0.0; 0.0; 0.0]; % [m/s]

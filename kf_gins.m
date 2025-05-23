@@ -11,11 +11,12 @@ clear;clc;
 
 % add function to workspace
 addpath("function\");
+addpath("plot-function\");
 
 %% define parameters and importdata process config
 param = Param();
-% cfg = ProcessConfig1();
-cfg = ProcessConfig2();
+cfg = ProcessConfig1();
+% cfg = ProcessConfig2();
 % cfg = ProcessConfig3();
 
 
@@ -26,6 +27,7 @@ imustarttime = imudata(1, 1);
 imuendtime = imudata(end, 1);
 
 % gnss data
+gnssCloseCnt=0;
 gnssdata = importdata(cfg.gnssfilepath);
 gnssdata(:, 2:3) = gnssdata(:, 2:3) * param.D2R;
 if (size(gnssdata, 2) < 13)
@@ -178,9 +180,14 @@ for imuindex = 2:size(imudata, 1)-1
         % do gnss update
         thisgnss = gnssdata(gnssindex, :)';
         %if imuindex<200*200 || imuindex>500*200 
+        if navstate.time>cfg.debugstarttime && navstate.time<cfg.debugendtime
+            % 关闭gnss
+            gnssCloseCnt = gnssCloseCnt+1;
+        else
             kf = GNSSUpdate(navstate, thisgnss, kf, cfg.antlever, cfg.usegnssvel, firstimu, imudt);
-        %end
-        [kf, navstate] = ErrorFeedback(kf, navstate);
+            [kf, navstate] = ErrorFeedback(kf, navstate);
+        end
+        
         gnssindex = gnssindex + 1;
         laststate = navstate;
         lastimu = firstimu;
@@ -223,6 +230,12 @@ for imuindex = 2:size(imudata, 1)-1
             end
             odoupdatetime = odoupdatetime + 1 / cfg.odoupdaterate;
         end
+    end
+
+    if cfg.usenhc
+        odonhc_vel = [0; 0; 0];
+        kf = ODONHCUpdate(navstate, odonhc_vel, kf, cfg, thisimu, imudt);
+        [kf, navstate] = ErrorFeedback(kf, navstate);
     end
 
 

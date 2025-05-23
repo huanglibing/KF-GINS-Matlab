@@ -27,7 +27,15 @@ else
     truthdata=importdata(truthpath);
 end
 
-
+% check heading error, 航向角误差处理
+for i = 1:size(truthdata(:, 11), 1)
+    if truthdata(i, 11) > 180
+        truthdata(i, 11) = truthdata(i, 11) - 360;
+    end
+    if truthdata(i, 11) < -180
+        truthdata(i, 11) = truthdata(i, 11) + 360;
+    end
+end
 
 % velocity
 figure()

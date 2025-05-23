@@ -31,7 +31,7 @@ function kf = ODONHCUpdate(navstate, odonhc_vel, kf, cfg, thisimu, dt)
     H(1:3, 7:9) = -cfg.cbv * navstate.cbn' * skew(navstate.vel);
     H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);       
 
-    if 1
+    if cfg.usenhc
         Z = Z(2:3);
         R = R(2:3,2:3);
         H = H(2:3,:);
