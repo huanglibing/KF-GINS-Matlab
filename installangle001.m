@@ -1,4 +1,6 @@
-
+% 数据一 安装角寻找 杆臂寻找
+% 找到一个点 直线运动 通过不断调整安装矩阵来使得vel_pre逼近[x 0 0]
+% 再找到一个点 转弯动作 通过不断调整杆臂来使得vel_pre逼近[x 0 0]
 
 % cfg.installangle = [0; -1.6; 1.2];
 % cfg.installangle = cfg.installangle * param.D2R;
@@ -13,7 +15,7 @@
 % 
 % vel_pre = cfg.cbv * (navstate.cbn' * navstate.vel )
 
-cfg.odolever = [-0.05; -0.0; 2.0]; %[m]
+cfg.odolever = [-0.05; -0.0; 2.0]; %[m] 前右下 以imu为原点的坐标系
 cfg.installangle = [0; -1.6; 1.2];
 cfg.installangle = cfg.installangle * param.D2R;
 cfg.cbv = euler2dcm(cfg.installangle);
