@@ -25,15 +25,17 @@ function kf = ODONHCUpdate(navstate, odonhc_vel, kf, cfg, thisimu, dt)
     Z = vel_pre - odonhc_vel;
 
     %% measurement equation and noise
-    Z = Z(2:3);
-    R = diag([0.1, 0.1].^2); % example noise values
-    % TODO: add measurement equation and noise matrix here!!
-    %% 4. 测量矩阵 H
+    R = diag([0.1, 0.1, 0.1].^2); % example noise values
     H = zeros(3, kf.RANK);
     H(1:3, 4:6) = navstate.cbn';
     H(1:3, 7:9) = -cfg.cbv * navstate.cbn' * skew(navstate.vel);
-    H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);        
-    H = H(2:3,:);
+    H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);       
+
+    if 1
+        Z = Z(2:3);
+        R = R(2:3,2:3);
+        H = H(2:3,:);
+    end
 
     %% update
     K = kf.P * H' / (H * kf.P * H' + R);

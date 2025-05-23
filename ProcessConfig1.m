@@ -55,8 +55,8 @@ function cfg = ProcessConfig()
 
     %% install parameters 安装参数
     cfg.antlever = [0.136; -0.301; -0.184]; % [m]
-    cfg.odolever = [0; 0; 0]; %[m]
-    cfg.installangle = [0; 0; 0]; %[deg]
+    cfg.odolever = [0; 0; 1.1]; %[m]
+    cfg.installangle = [0; 0.25; -0.95]; %[deg]
 
     %% ODO/NHC measurement noise 观测噪声
     cfg.odonhc_measnoise = [0.1; 0.1; 0.1]; % [m/s]
