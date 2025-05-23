@@ -15,9 +15,9 @@ addpath("function\");
 
 %% define parameters and importdata process config
 param = Param();
-cfg = ProcessConfig1();
+% cfg = ProcessConfig1();
 % cfg = ProcessConfig2();
-% cfg = ProcessConfig3();
+cfg = ProcessConfig3();
 
 
 %% importdata data
@@ -178,7 +178,9 @@ for imuindex = 2:size(imudata, 1)-1
 
         % do gnss update
         thisgnss = gnssdata(gnssindex, :)';
-        kf = GNSSUpdate(navstate, thisgnss, kf, cfg.antlever, cfg.usegnssvel, firstimu, imudt);
+        if imuindex<200*200 || imuindex>500*200 
+            kf = GNSSUpdate(navstate, thisgnss, kf, cfg.antlever, cfg.usegnssvel, firstimu, imudt);
+        end
         [kf, navstate] = ErrorFeedback(kf, navstate);
         gnssindex = gnssindex + 1;
         laststate = navstate;
@@ -195,7 +197,6 @@ for imuindex = 2:size(imudata, 1)-1
         % error propagation
         kf = InsPropagate(navstate, thisimu, imudt, kf, cfg.corrtime);
     end
-
 
     if cfg.useodonhc
         %% update odo index

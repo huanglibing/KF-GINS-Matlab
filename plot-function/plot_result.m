@@ -7,10 +7,26 @@
 % Contact : wlq@whu.edu.cn
 %    Date : 2022.11.30
 % -------------------------------------------------------------------------
-
+close all
+clear
+clc
 % importdata navresult
-navpath = "dataset1/NavResult.nav";
+
+% navpath = "dataset1/NavResult.nav";
+% navdata = importdata(navpath);
+% truthpath = 'dataset1/truth.nav';
+% truthdata=importdata(truthpath);
+
+% navpath = "dataset2/NavResult_GNSSVEL.nav";
+% navdata = importdata(navpath);
+% truthpath = 'dataset2/truth.nav';
+% truthdata=importdata(truthpath);
+
+
+navpath = "dataset3/NavResult_ODONHC.nav";
 navdata = importdata(navpath);
+truthpath = 'dataset3/truth.nav';
+truthdata=importdata(truthpath);
 
 % velocity
 figure()
@@ -23,9 +39,10 @@ grid("on");
 
 % attitude
 figure()
-plot(navdata(:, 2), navdata(:, 9:11));
+subplot(311);hold on;grid on;plot(navdata(:, 2), navdata(:, 9));plot(truthdata(:, 2), truthdata(:, 9),'--');legend('Roll','ref');
+subplot(312);hold on;grid on;plot(navdata(:, 2), navdata(:,10));plot(truthdata(:, 2), truthdata(:, 10),'--');legend('Pitch','ref');
+subplot(313);hold on;grid on;plot(navdata(:, 2), navdata(:, 11));plot(truthdata(:, 2), truthdata(:, 11),'--');legend( 'Yaw','ref');
 title('Attitude');
-legend('Roll', 'Pitch', 'Yaw');
 xlabel('Time[s]');
 ylabel('Att[deg]');
 grid("on");
@@ -49,18 +66,41 @@ for i = 1:size(pos, 1)
     pos(i, :) = delta_pos';
 end
 
+
+blhRef = truthdata(:, 3:5);
+blhRef(:, 1) = blhRef(:, 1) * param.D2R;
+blhRef(:, 2) = blhRef(:, 2) * param.D2R;
+first_blh = blhRef(1, 1:3);
+
+[rm, rn] = getRmRn(first_blh(1), param);
+h = first_blh(2);
+DR = diag([rm + h, (rn + h)*cos(first_blh(1)), -1]);
+
+% blhRef to ned
+truthpos = zeros(size(blhRef));
+for i = 1:size(truthpos, 1)
+    delta_blh = blhRef(i, :) - first_blh;
+    delta_pos = DR * delta_blh';
+    truthpos(i, :) = delta_pos';
+end
+
 %% plane position
 figure()
+hold on;
 plot(pos(:, 2), pos(:, 1));
-title('Position');
+plot(truthpos(:, 2), truthpos(:, 1),'--');
+legend( 'Pos','ref');
+title('Position','ref');
 xlabel('East[m]');
 ylabel('North[m]');
 grid("on");
 
 %% height
 figure()
+hold on;
 plot(navdata(:, 2), navdata(:, 5));
-title('Height');
+plot(truthdata(:, 2), truthdata(:, 5),'--');
+title('Height','ref');
 xlabel('Time[s]');
 ylabel('Height[m]');
 grid("on");

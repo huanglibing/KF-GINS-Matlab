@@ -7,11 +7,17 @@
 % Contact : wlq@whu.edu.cn
 %    Date : 2022.11.30
 % -------------------------------------------------------------------------
-
+clear
+clc
+close all
 
 %% importdata data （nav文件第一列为0，不需要用）
-testnavpath = 'dataset1/NavResult.nav';
-truthpath = 'dataset1/truth.nav';
+% testnavpath = 'dataset1/NavResult.nav';
+% truthpath = 'dataset1/truth.nav';
+
+testnavpath = 'dataset3/NavResult_ODONHC.nav';
+truthpath = 'dataset3/truth.nav';
+
 temp = importdata(testnavpath);
 result_all = temp(:, 2:end);
 temp=importdata(truthpath);
