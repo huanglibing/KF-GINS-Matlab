@@ -27,9 +27,17 @@ function kf = ODONHCUpdate(navstate, odonhc_vel, kf, cfg, thisimu, dt)
     %% measurement equation and noise
     R = diag(power(cfg.odonhc_measnoise, 2));%m m m
     H = zeros(3, kf.RANK);
-    H(1:3, 4:6) = navstate.cbn';
+
+    % 唐海亮论文参考 十五阶
+    % H(1:3, 4:6) = navstate.cbn'; % 此处论文少写了一个旋转矩阵 cfg.cbv*
+    % H(1:3, 7:9) = -cfg.cbv * navstate.cbn' * skew(navstate.vel);
+    % H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);     
+
+    % 吴佳豪论文参考 二十一阶
+    H(1:3, 4:6) = cfg.cbv*navstate.cbn';
     H(1:3, 7:9) = -cfg.cbv * navstate.cbn' * skew(navstate.vel);
-    H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);       
+    H(1:3, 10:12) = -cfg.cbv * skew(cfg.odolever);      
+    %H(1:3, 16:18) = -cfg.cbv * skew(cfg.odolever) * diag(wib_b);  %为什么增加这一项更差了
 
     if cfg.usenhc
         Z = Z(2:3);

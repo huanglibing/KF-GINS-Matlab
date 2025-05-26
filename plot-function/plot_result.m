@@ -7,7 +7,7 @@
 % Contact : wlq@whu.edu.cn
 %    Date : 2022.11.30
 % -------------------------------------------------------------------------
-close all
+
 % importdata navresult
 
 if cfg.outputfolder=="dataset1"

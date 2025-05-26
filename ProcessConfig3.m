@@ -20,8 +20,8 @@ function cfg = ProcessConfig3()
 
     %% configure
     cfg.usegnssvel = false;
-    cfg.useodonhc = false;
-    cfg.usenhc = true;
+    cfg.useodonhc = true;
+    cfg.usenhc = false;
     cfg.odoupdaterate = 10; % [Hz]
 
     %% initial information

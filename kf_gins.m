@@ -16,8 +16,8 @@ addpath("plot-function\");
 %% define parameters and importdata process config
 param = Param();
 % cfg = ProcessConfig1();
-cfg = ProcessConfig2();
-% cfg = ProcessConfig3();
+% cfg = ProcessConfig2();
+cfg = ProcessConfig3();
 
 
 %% importdata data

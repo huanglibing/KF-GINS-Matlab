@@ -9,7 +9,7 @@
 % -------------------------------------------------------------------------
 
 %% importdata imuerror
-
+close all
 
 if cfg.outputfolder=="dataset1"
     imuerrorfile = 'dataset1/ImuError.txt';
