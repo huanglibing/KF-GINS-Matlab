@@ -10,7 +10,15 @@
 
 
 %% importdata std
-stdfile = 'dataset1/NavSTD.txt';
+
+
+if cfg.outputfolder=="dataset1"
+    stdfile = 'dataset1/NavSTD.txt';
+elseif cfg.outputfolder=="dataset2"
+    stdfile = 'dataset2/NavSTD.txt';
+else
+    stdfile = 'dataset3/NavSTD.txt';
+end
 std = importdata(stdfile);
 
 figure()

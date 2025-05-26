@@ -14,10 +14,10 @@ if cfg.outputfolder=="dataset1"
     testnavpath = 'dataset1/NavResult.nav';
     truthpath = 'dataset1/truth.nav';
 elseif cfg.outputfolder=="dataset2"
-    testnavpath = 'dataset2/NavResult_GNSSVEL.nav';
+    testnavpath = 'dataset2/NavResult.nav';
     truthpath = 'dataset2/truth.nav';
 else
-    testnavpath = 'dataset3/NavResult_ODONHC.nav';
+    testnavpath = 'dataset3/NavResult.nav';
     truthpath = 'dataset3/truth.nav';
 end
 

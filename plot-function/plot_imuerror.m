@@ -9,7 +9,16 @@
 % -------------------------------------------------------------------------
 
 %% importdata imuerror
-imuerrorfile = 'dataset1/ImuError.txt';
+
+
+if cfg.outputfolder=="dataset1"
+    imuerrorfile = 'dataset1/ImuError.txt';
+elseif cfg.outputfolder=="dataset2"
+    imuerrorfile = 'dataset2/ImuError.txt';
+else
+    imuerrorfile = 'dataset3/ImuError.txt';
+end
+
 err = importdata(imuerrorfile);
 
 figure()

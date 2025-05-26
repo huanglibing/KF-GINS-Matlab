@@ -28,9 +28,15 @@ function cfg = ProcessConfig()
     cfg.starttime = 456300;
     cfg.endtime = inf;
 
-    %% 关闭gnss时间
-    cfg.debugstarttime = cfg.starttime+200;
-    cfg.debugendtime = cfg.endtime+inf;
+    %% GNSS中断配置GNSS outage configurations, the GNSS will not be used after the gnssoutagetime 
+    %isusegnssoutage: true
+    cfg.GnssOutageStart = cfg.starttime+200; % 单位秒
+    cfg.GnssOutageEnd = cfg.endtime+inf;    % 单位秒 inf
+
+    % 固定阈值GNSS抗差 (m)
+    % A fixed threshold (STD, m) for GNSS outlier culling
+    % gnssthreshold: 20 gnssthreshold: 0.2
+
 
     cfg.initpos = [30.4447873701; 114.4718632047; 20.899]; % [deg, deg, m]
     cfg.initvel = [0; 0; 0]; % [m/s]

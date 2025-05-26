@@ -16,12 +16,12 @@ if cfg.outputfolder=="dataset1"
     truthpath = 'dataset1/truth.nav';
     truthdata=importdata(truthpath);
 elseif cfg.outputfolder=="dataset2"
-    navpath = "dataset2/NavResult_GNSSVEL.nav";
+    navpath = "dataset2/NavResult.nav";
     navdata = importdata(navpath);
     truthpath = 'dataset2/truth.nav';
     truthdata=importdata(truthpath);
 else
-    navpath = "dataset3/NavResult_ODONHC.nav";
+    navpath = "dataset3/NavResult.nav";
     navdata = importdata(navpath);
     truthpath = 'dataset3/truth.nav';
     truthdata=importdata(truthpath);

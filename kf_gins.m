@@ -7,7 +7,7 @@
 % Contact : wlq@whu.edu.cn
 %    Date : 2023.3.2
 % -------------------------------------------------------------------------
-clear;clc;
+clear;clc;format long;
 
 % add function to workspace
 addpath("function\");
@@ -15,8 +15,8 @@ addpath("plot-function\");
 
 %% define parameters and importdata process config
 param = Param();
-cfg = ProcessConfig1();
-% cfg = ProcessConfig2();
+% cfg = ProcessConfig1();
+cfg = ProcessConfig2();
 % cfg = ProcessConfig3();
 
 
@@ -44,14 +44,14 @@ end
 
 %% save result
 navpath = [cfg.outputfolder, '/NavResult'];
-if cfg.usegnssvel
-    navpath = [navpath, '_GNSSVEL'];
-    disp("use GNSS velocity!");
-end
-if cfg.useodonhc
-    navpath = [navpath, '_ODONHC'];
-    disp("use ODO velocity!");
-end
+% if cfg.usegnssvel
+%     navpath = [navpath, '_GNSSVEL'];
+%     disp("use GNSS velocity!");
+% end
+% if cfg.useodonhc
+%     navpath = [navpath, '_ODONHC'];
+%     disp("use ODO velocity!");
+% end
 navpath = [navpath, '.nav'];
 navfp = fopen(navpath, 'wt');
 
@@ -157,10 +157,15 @@ for imuindex = 2:size(imudata, 1)-1
 
     %% determine whether gnss update is required
     if lastimu(1, 1) == gnssdata(gnssindex, 1)
-        % do gnss update for the current state
+        % do gnss update for the current state 
         thisgnss = gnssdata(gnssindex, :)';
-        kf = GNSSUpdate(navstate, thisgnss, kf, cfg.antlever, cfg.usegnssvel, lastimu, imudt);
-        [kf, navstate] = ErrorFeedback(kf, navstate);
+        if navstate.time>cfg.GnssOutageStart && navstate.time<cfg.GnssOutageEnd
+            % 关闭gnss
+            gnssCloseCnt = gnssCloseCnt+1;
+        else
+            kf = GNSSUpdate(navstate, thisgnss, kf, cfg.antlever, cfg.usegnssvel, lastimu, imudt);
+            [kf, navstate] = ErrorFeedback(kf, navstate);     
+        end
         gnssindex = gnssindex + 1;
         laststate = navstate;
         
@@ -169,18 +174,18 @@ for imuindex = 2:size(imudata, 1)-1
         navstate = InsMech(laststate, lastimu, thisimu);
         kf = InsPropagate(navstate, thisimu, imudt, kf, cfg.corrtime);
     elseif (lastimu(1, 1) < gnssdata(gnssindex, 1) && thisimu(1, 1) > gnssdata(gnssindex, 1))
+        % 将imu根据gnss时间拆分为两组，从而提高精度
         % ineterpolate imu to gnss time
         [firstimu, secondimu] = interpolate(lastimu, thisimu, gnssdata(gnssindex, 1));
         
-        % do propagation for first imu
+        % do propagation for first imu 第一组imu积分
         imudt = firstimu(1, 1) - lastimu(1, 1);
         navstate = InsMech(laststate, lastimu, firstimu);
         kf = InsPropagate(navstate, firstimu, imudt, kf, cfg.corrtime);
 
         % do gnss update
         thisgnss = gnssdata(gnssindex, :)';
-        %if imuindex<200*200 || imuindex>500*200 
-        if navstate.time>cfg.debugstarttime && navstate.time<cfg.debugendtime
+        if navstate.time>cfg.GnssOutageStart && navstate.time<cfg.GnssOutageEnd
             % 关闭gnss
             gnssCloseCnt = gnssCloseCnt+1;
         else
@@ -192,7 +197,7 @@ for imuindex = 2:size(imudata, 1)-1
         laststate = navstate;
         lastimu = firstimu;
 
-        % do propagation for second imu
+        % do propagation for second imu 第二组imu积分
         imudt = secondimu(1, 1) - lastimu(1, 1);
         navstate = InsMech(laststate, lastimu, secondimu);
         kf = InsPropagate(navstate, secondimu, imudt, kf, cfg.corrtime);
@@ -284,6 +289,8 @@ fclose(stdfp);
 
 disp("GNSS/INS Integration Processing Finished!");
 
+
+plot_imuerror;
 plot_result;
 calc_error;
 

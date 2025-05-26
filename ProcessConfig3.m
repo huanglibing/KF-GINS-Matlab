@@ -20,17 +20,22 @@ function cfg = ProcessConfig3()
 
     %% configure
     cfg.usegnssvel = false;
-    cfg.useodonhc = true;
-    cfg.usenhc = false;
+    cfg.useodonhc = false;
+    cfg.usenhc = true;
     cfg.odoupdaterate = 10; % [Hz]
 
     %% initial information
     cfg.starttime = 292460;
     cfg.endtime = 293196;%293196;
 
-    %% 关闭gnss时间
-    cfg.debugstarttime = cfg.starttime+inf;
-    cfg.debugendtime = cfg.endtime+inf;
+    %% GNSS中断配置GNSS outage configurations, the GNSS will not be used after the gnssoutagetime 
+    %isusegnssoutage: true
+    cfg.GnssOutageStart = cfg.starttime+200; % 单位秒
+    cfg.GnssOutageEnd = cfg.GnssOutageStart+inf;    % 单位秒 inf
+
+    % 固定阈值GNSS抗差 (m)
+    % A fixed threshold (STD, m) for GNSS outlier culling
+    % gnssthreshold: 20 gnssthreshold: 0.2
 
     cfg.initpos = [30.5285037471; 114.3556962503; 21.091]; % [deg, deg, m]
     cfg.initvel = [0.0; 0.0; 0.0]; % [m/s]

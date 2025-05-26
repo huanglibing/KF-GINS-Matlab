@@ -43,11 +43,11 @@ function navstate = InsMech(laststate, lastimu, thisimu)
     temp3 = cross(last_dvel, this_dtheta) / 12;
 
     % velocity increment due to the specific force, b系比例积分项
-    d_vfb = this_dvel + temp1 + temp2 + temp3;
+    d_vfb = this_dvel + temp1 + temp2 + temp3;  % 6.225公式
     % projected to the n-frame, n系比例积分项
     temp1 = (wie_n + wen_n) * this_dt / 2;
     cnn = eye(3) - skew(temp1);
-    d_vfn = cnn * lastcbn * d_vfb;
+    d_vfn = cnn * lastcbn * d_vfb;  %6.213公式
 
     % velocity increment due to the gravity and Coriolis force
     % 重力/哥氏积分项
@@ -114,7 +114,7 @@ function navstate = InsMech(laststate, lastimu, thisimu)
     thispos = [lat; lon; height];
 
 
-    %% attitude update
+    %% attitude update 6.2.5 n系下的姿态更新算法示例
     % recompute velocity and position at k-1/2, 重新计算中间时刻的速度和位置
     midvel = (lastvel + thisvel) / 2;
     last_qne = bl2qne(lastpos(1), lastpos(2));
